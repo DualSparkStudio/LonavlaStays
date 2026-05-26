@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import NavLink from './NavLink';
 import { mainNavConfig } from './NavIcons';
 import { RESORT_NAME } from '../../data/resort';
-import ThemeToggle from '../ui/ThemeToggle';
-
 type PublicHeaderProps = {
   currentPage?: string;
 };
@@ -58,9 +56,11 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ currentPage = 'home' }) => 
             ))}
           </nav>
 
-          <div className="nav-link-enter" style={{ animationDelay: '720ms' }}>
-            <ThemeToggle />
-          </div>
+          <div
+            className="nav-link-enter h-11 w-11 shrink-0"
+            style={{ animationDelay: '720ms' }}
+            aria-hidden
+          />
         </div>
       </div>
     </header>
