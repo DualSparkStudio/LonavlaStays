@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+dist-ssr/
+build/
+.vite/
+
+# Environment
+.env
+.env.*
+!.env.example
+!env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.local
+
+# Test / coverage
+coverage/
+
+# Netlify
+.netlify/

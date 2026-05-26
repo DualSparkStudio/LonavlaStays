@@ -1,0 +1,208 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply font-sans text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100;
+    font-size: 1.03rem;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Anton', Impact, 'Arial Narrow Bold', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+
+  p,
+  a,
+  button,
+  input,
+  select,
+  textarea,
+  label,
+  span,
+  li {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  .font-heading {
+    font-family: 'Anton', Impact, 'Arial Narrow Bold', sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-header {
+    @apply sticky top-0 z-50 transition-all duration-300 ease-out;
+  }
+
+  .nav-header-scrolled {
+    @apply bg-white/90 backdrop-blur-md shadow-md border-b border-[#EBEBEB] dark:bg-gray-900/90 dark:border-gray-800;
+  }
+
+  .nav-header-top {
+    @apply bg-white border-b border-[#EBEBEB] dark:bg-gray-900 dark:border-gray-800;
+  }
+
+  .hero-glow {
+    background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(255, 56, 92, 0.12), transparent 70%);
+  }
+
+  .search-bar-shell {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .search-bar-shell:hover {
+    @apply shadow-floating -translate-y-0.5;
+  }
+
+  .search-bar-shell:focus-within {
+    @apply shadow-floating ring-2 ring-airbnb-red/20 -translate-y-0.5;
+  }
+
+  .room-card {
+    @apply transition-all duration-300 ease-out will-change-transform;
+  }
+
+  .room-card:hover {
+    @apply -translate-y-2 shadow-card-hover border-airbnb-red/20;
+  }
+
+  .room-card .room-card-image {
+    @apply transition-transform duration-500 ease-out;
+  }
+
+  .room-card:hover .room-card-image {
+    @apply scale-105;
+  }
+
+  .room-card .villa-card-tag {
+    @apply text-airbnb-red;
+  }
+
+  .room-card .villa-card-price {
+    @apply text-airbnb-red;
+  }
+
+  .explore-tile {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .explore-tile:hover {
+    @apply -translate-y-1 shadow-card-hover;
+  }
+
+  .explore-tile:hover .explore-tile-image {
+    @apply scale-110;
+  }
+
+  .explore-tile:hover .explore-tile-label {
+    @apply scale-105 text-airbnb-red-light;
+  }
+
+  .btn-primary-motion {
+    @apply transition-all duration-300 ease-out active:scale-95;
+  }
+
+  .btn-primary-motion:hover {
+    @apply -translate-y-0.5 shadow-lg shadow-airbnb-red/30;
+  }
+
+  .nav-link-enter {
+    opacity: 0;
+    animation: navLinkEnter 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .nav-icon-wrap {
+    @apply relative inline-flex items-center justify-center transition-all duration-300;
+  }
+
+  .nav-icon-wrap::after {
+    content: '';
+    @apply absolute inset-0 rounded-full scale-0 opacity-0 transition-all duration-300;
+    background: radial-gradient(circle, rgba(255, 56, 92, 0.25) 0%, transparent 70%);
+  }
+
+  .nav-link-item:hover .nav-icon-wrap::after {
+    @apply scale-150 opacity-100;
+  }
+
+  .nav-link-item:hover .nav-icon-motion {
+    animation: navIconHover 0.45s cubic-bezier(0.34, 1.45, 0.64, 1) forwards;
+    filter: drop-shadow(0 6px 10px rgba(255, 56, 92, 0.25));
+  }
+
+  .nav-icon-motion {
+    @apply relative z-10 transition-transform duration-300 ease-out;
+  }
+
+  .nav-link-item:hover .nav-link-label {
+    @apply -translate-y-0.5;
+  }
+
+  @keyframes navLinkEnter {
+    0% {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes navIconHover {
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+    35% {
+      transform: scale(1.18) rotate(-8deg) translateY(-5px);
+    }
+    65% {
+      transform: scale(1.12) rotate(6deg) translateY(-3px);
+    }
+    100% {
+      transform: scale(1.15) rotate(0deg) translateY(-4px);
+    }
+  }
+
+  .shimmer-line {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 56, 92, 0) 0%,
+      rgba(255, 56, 92, 0.35) 50%,
+      rgba(255, 56, 92, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2.5s ease-in-out infinite;
+  }
+}

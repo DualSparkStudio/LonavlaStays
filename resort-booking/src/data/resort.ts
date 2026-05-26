@@ -1,0 +1,167 @@
+export const RESORT_NAME = 'The Lonavala Stays';
+export const BRAND_TAGLINE = 'Curated luxury villas across Lonavala';
+export const RESORT_LOCATION = 'Lonavala, Maharashtra';
+/** Reservations & management office (not a single guest property). */
+export const RESORT_ADDRESS = 'Office 2, Hill Plaza, Old Mumbai-Pune Highway, Lonavala 410401';
+export const RESORT_PHONE = '+91 98765 43210';
+export const RESORT_EMAIL = 'stay@lonavalastays.com';
+
+export type Room = {
+  id: string;
+  name: string;
+  room_type: string;
+  description: string;
+  price_per_night: number;
+  /** Area or neighbourhood shown on cards, e.g. Tiger Valley */
+  location: string;
+  /** Full street address for this villa property */
+  address: string;
+  max_guests: number;
+  /** Internal reference code */
+  room_number: string;
+  rating: number;
+  review_count: number;
+  status: 'available' | 'maintenance' | 'occupied';
+  amenities: string[];
+  images: string[];
+};
+
+export const demoRooms: Room[] = [
+  {
+    id: '1',
+    name: 'Valley View Villa',
+    room_type: 'Deluxe Villa',
+    description:
+      'A standalone hill villa with misty Sahyadri views from a private deck. Ideal for couples and small families seeking a quiet Lonavala escape.',
+    price_per_night: 6500,
+    location: 'Tiger Valley, Lonavala',
+    address: 'Survey No. 12, Tiger Valley Road, Lonavala, Maharashtra 410401',
+    max_guests: 3,
+    room_number: 'VV-01',
+    rating: 4.9,
+    review_count: 128,
+    status: 'available',
+    amenities: ['Valley View', 'Private Deck', 'Wi-Fi', 'Air Conditioning', 'Kitchenette', 'Breakfast Included'],
+    images: [
+      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1566665797739-1674de666a01?w=800&h=600&fit=crop',
+    ],
+  },
+  {
+    id: '2',
+    name: 'Garden Wing Villa',
+    room_type: 'Family Villa',
+    description:
+      'Spacious private villa with landscaped gardens and a separate living wing—perfect for families who want their own property in the hills.',
+    price_per_night: 9200,
+    location: 'Tungarli, Lonavala',
+    address: 'Lane 4, Near Tungarli Lake, Lonavala, Maharashtra 410403',
+    max_guests: 5,
+    room_number: 'GW-02',
+    rating: 4.8,
+    review_count: 89,
+    status: 'available',
+    amenities: ['Private Garden', 'Living Area', 'Wi-Fi', 'Air Conditioning', 'Parking', 'BBQ Patio'],
+    images: [
+      'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop',
+    ],
+  },
+  {
+    id: '3',
+    name: 'Hillside Premium Villa',
+    room_type: 'Premium Villa',
+    description:
+      'Flagship villa with panoramic hill views, premium interiors, and a large sit-out—our most requested property for special occasions.',
+    price_per_night: 11500,
+    location: 'Khandala Hills, Lonavala',
+    address: 'Plot 8, Khandala View Road, Lonavala, Maharashtra 410401',
+    max_guests: 4,
+    room_number: 'HP-03',
+    rating: 5.0,
+    review_count: 64,
+    status: 'available',
+    amenities: ['Panoramic View', 'King Bed', 'Private Pool', 'Wi-Fi', 'Chef on Request', 'Tea/Coffee Bar'],
+    images: [
+      'https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&fit=crop',
+    ],
+  },
+  {
+    id: '4',
+    name: 'Garden Cottage Villa',
+    room_type: 'Cottage Villa',
+    description:
+      'Intimate standalone cottage tucked into greenery—romantic, private, and fully self-contained with its own entrance and patio.',
+    price_per_night: 7800,
+    location: 'Kurvande, Lonavala',
+    address: 'Cottage 12, Green Meadows Estate, Kurvande, Lonavala 410401',
+    max_guests: 2,
+    room_number: 'GC-04',
+    rating: 4.7,
+    review_count: 52,
+    status: 'available',
+    amenities: ['Private Entry', 'Garden Patio', 'Wi-Fi', 'Air Conditioning', 'Complimentary Breakfast', 'Parking'],
+    images: [
+      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&fit=crop',
+      'https://images.unsplash.com/photo-1560185127-6ed189bf02f4?w=800&h=600&fit=crop',
+    ],
+  },
+];
+
+export const resortFacilities = [
+  {
+    id: 'pool',
+    name: 'Private & shared pools',
+    description: 'Select villas include plunge or infinity pools; others are a short drive from scenic lake spots.',
+    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&h=500&fit=crop',
+    hours: 'Varies by villa',
+  },
+  {
+    id: 'spa',
+    name: 'In-villa wellness',
+    description: 'Spa and massage partners can be arranged at your villa—no need to leave the property.',
+    image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&h=500&fit=crop',
+    hours: 'By appointment',
+  },
+  {
+    id: 'dining',
+    name: 'Chef & dining',
+    description: 'In-villa meals, barbecue nights, and local Maharashtrian menus on request across the collection.',
+    image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop',
+    hours: 'On request',
+  },
+  {
+    id: 'bonfire',
+    name: 'Outdoor experiences',
+    description: 'Bonfires, stargazing decks, and terrace evenings—set up at villas with outdoor space.',
+    image: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587209?w=800&h=500&fit=crop',
+    hours: 'Seasonal',
+  },
+  {
+    id: 'trek',
+    name: 'Nature trails & treks',
+    description: 'Our team coordinates guided walks and viewpoints near each villa’s neighbourhood.',
+    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=500&fit=crop',
+    hours: 'By appointment',
+  },
+  {
+    id: 'games',
+    name: 'Family recreation',
+    description: 'Board games, indoor lounges, and kid-friendly setups—amenities vary; check each villa listing.',
+    image: 'https://images.unsplash.com/photo-1517457373958-b7bdd4587209?w=800&h=500&fit=crop',
+    hours: 'Varies by villa',
+  },
+];
+
+export function getRoomById(id: string): Room | undefined {
+  return demoRooms.find((room) => room.id === id);
+}
+
+export function formatPrice(amount: number): string {
+  return `₹${amount.toLocaleString('en-IN')}`;
+}
