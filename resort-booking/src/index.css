@@ -21,12 +21,17 @@
     }
   }
 
+  html {
+    overflow-x: hidden;
+  }
+
   body {
     @apply font-sans text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100;
     font-size: 1.03rem;
     font-weight: 500;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
   }
 
   h1,
@@ -204,5 +209,22 @@
     );
     background-size: 200% 100%;
     animation: shimmer 2.5s ease-in-out infinite;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full;
+  }
+
+  .responsive-search-grid {
+    @apply grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-center;
   }
 }

@@ -85,8 +85,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   }
 
   return (
-    <div className={cn('bg-white rounded-full shadow-lg border border-gray-200', className)}>
-      <div className="flex items-center divide-x divide-gray-300">
+    <div className={cn('bg-white rounded-2xl md:rounded-full shadow-lg border border-gray-200', className)}>
+      <div className="flex flex-col md:flex-row md:items-center md:divide-x md:divide-gray-300">
         {/* Check-in */}
         <div className="flex-1 min-w-0">
           <button
@@ -221,10 +221,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </div>
 
         {/* Search Button */}
-        <div className="pl-4 pr-2">
+        <div className="flex justify-end p-3 md:pl-4 md:pr-2 md:py-0 md:items-center">
           <Button
             onClick={handleSearch}
-            className="rounded-full p-4"
+            className="rounded-full p-4 w-full md:w-auto"
             size="sm"
           >
             <MagnifyingGlassIcon className="h-4 w-4" />

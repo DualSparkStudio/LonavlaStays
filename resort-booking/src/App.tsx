@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate, useParams } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AnimatedSection from './components/ui/AnimatedSection';
@@ -94,53 +95,102 @@ const demoUsers = [
   }
 ];
 
+const adminNavLinks = [
+  { to: '/admin', page: 'dashboard', label: 'Dashboard' },
+  { to: '/admin/rooms', page: 'rooms', label: 'Villas' },
+  { to: '/admin/bookings', page: 'bookings', label: 'Bookings' },
+  { to: '/admin/users', page: 'users', label: 'Users' },
+  { to: '/admin/analytics', page: 'analytics', label: 'Analytics' },
+] as const;
+
 // Admin Header Component
 const AdminHeader = ({ currentPage = 'dashboard' }: { currentPage?: string }) => {
   const navigate = useNavigate();
-  
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  const linkClass = (page: string) =>
+    currentPage === page ? 'text-red-500' : 'text-gray-600 hover:text-gray-900';
+
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          <div className="flex items-center">
-            <Link to="/admin" className="flex items-center">
-              <div className="h-8 w-8 bg-gradient-to-r from-red-500 to-pink-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">⚙️</span>
-              </div>
-              <span className="ml-2 text-xl font-bold text-gray-900">
-                Resort<span className="text-red-500">Admin</span>
-              </span>
-            </Link>
-          </div>
-          <nav className="hidden md:flex space-x-8">
-            <Link to="/admin" className={`${currentPage === 'dashboard' ? 'text-red-500' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-              Dashboard
-            </Link>
-            <Link to="/admin/rooms" className={`${currentPage === 'rooms' ? 'text-red-500' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-              Villas
-            </Link>
-            <Link to="/admin/bookings" className={`${currentPage === 'bookings' ? 'text-red-500' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-              Bookings
-            </Link>
-            <Link to="/admin/users" className={`${currentPage === 'users' ? 'text-red-500' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-              Users
-            </Link>
-            <Link to="/admin/analytics" className={`${currentPage === 'analytics' ? 'text-red-500' : 'text-gray-600 hover:text-gray-900'} transition-colors`}>
-              Analytics
-            </Link>
+        <div className="flex justify-between items-center min-h-16 py-2 md:py-0">
+          <Link to="/admin" className="flex items-center min-w-0">
+            <div className="h-8 w-8 shrink-0 bg-gradient-to-r from-red-500 to-pink-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">⚙️</span>
+            </div>
+            <span className="ml-2 text-lg sm:text-xl font-bold text-gray-900 truncate">
+              Resort<span className="text-red-500">Admin</span>
+            </span>
+          </Link>
+
+          <nav className="hidden md:flex space-x-6 lg:space-x-8" aria-label="Admin">
+            {adminNavLinks.map((item) => (
+              <Link
+                key={item.page}
+                to={item.to}
+                className={`${linkClass(item.page)} transition-colors text-sm lg:text-base`}
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
-          <div className="flex items-center space-x-4">
-            <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
+
+          <div className="hidden md:flex items-center gap-3 shrink-0">
+            <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors text-sm">
               View Site
             </Link>
-            <button 
+            <button
+              type="button"
               onClick={() => navigate('/admin/login')}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-full font-medium transition-colors"
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-full font-medium transition-colors text-sm"
             >
               Logout
             </button>
           </div>
+
+          <button
+            type="button"
+            className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-lg border border-gray-200 text-gray-800"
+            onClick={() => setMobileOpen((o) => !o)}
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          >
+            {mobileOpen ? <XMarkIcon className="h-6 w-6" /> : <Bars3Icon className="h-6 w-6" />}
+          </button>
         </div>
+
+        {mobileOpen && (
+          <nav className="md:hidden border-t border-gray-200 py-3 space-y-1" aria-label="Admin mobile">
+            {adminNavLinks.map((item) => (
+              <Link
+                key={item.page}
+                to={item.to}
+                onClick={() => setMobileOpen(false)}
+                className={`block rounded-lg px-3 py-2.5 font-medium ${linkClass(item.page)}`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <Link
+              to="/"
+              onClick={() => setMobileOpen(false)}
+              className="block rounded-lg px-3 py-2.5 font-medium text-gray-600 hover:text-gray-900"
+            >
+              View Site
+            </Link>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileOpen(false);
+                navigate('/admin/login');
+              }}
+              className="w-full text-left rounded-lg px-3 py-2.5 font-medium text-gray-800 bg-gray-100"
+            >
+              Logout
+            </button>
+          </nav>
+        )}
       </div>
     </header>
   );
@@ -944,7 +994,7 @@ const AdminRooms = () => {
           </div>
         )}
 
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Villa management</h1>
             <p className="text-gray-600">Manage multiple villas, locations, and availability</p>
@@ -1087,7 +1137,7 @@ const AdminBookings = () => {
       <AdminHeader currentPage="bookings" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Booking Management</h1>
             <p className="text-gray-600">Manage all resort bookings and reservations</p>
@@ -1211,7 +1261,7 @@ const AdminUsers = () => {
       <AdminHeader currentPage="users" />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">User Management</h1>
             <p className="text-gray-600">Manage registered users and their accounts</p>
@@ -1435,10 +1485,10 @@ const HomePage = () => {
           </div>
 
           {/* Search Bar */}
-          <AnimatedSection variant="scale-in" delay={250} className="max-w-4xl mx-auto">
-            <div className="search-bar-shell bg-white rounded-full shadow-lg border border-gray-200 p-2 motion-safe:animate-float">
-              <div className="flex items-center">
-                <div className="flex-1 px-4 py-3">
+          <AnimatedSection variant="scale-in" delay={250} className="max-w-4xl mx-auto w-full">
+            <div className="search-bar-shell bg-white rounded-2xl md:rounded-full shadow-lg border border-gray-200 p-3 md:p-2 motion-safe:animate-float">
+              <div className="flex flex-col md:flex-row md:items-center md:divide-x md:divide-gray-300">
+                <div className="flex-1 min-w-0 px-3 py-2 md:px-4 md:py-3 border-b border-gray-100 md:border-b-0">
                   <div className="text-sm font-bold text-gray-900 mb-1">Where</div>
                   <input
                     type="text"
@@ -1448,30 +1498,30 @@ const HomePage = () => {
                     className="w-full text-base font-medium text-gray-700 bg-transparent border-0 focus:outline-none placeholder:text-gray-500"
                   />
                 </div>
-                <div className="hidden md:block w-px h-8 bg-gray-300"></div>
-                <div className="hidden md:block flex-1 px-4 py-3">
+                <div className="flex-1 min-w-0 px-3 py-2 md:px-4 md:py-3 border-b border-gray-100 md:border-b-0">
                   <div className="text-sm font-bold text-gray-900 mb-1">Check in</div>
                   <div className="text-base font-medium text-gray-600">Add dates</div>
                 </div>
-                <div className="hidden md:block w-px h-8 bg-gray-300"></div>
-                <div className="hidden md:block flex-1 px-4 py-3">
+                <div className="flex-1 min-w-0 px-3 py-2 md:px-4 md:py-3 border-b border-gray-100 md:border-b-0">
                   <div className="text-sm font-bold text-gray-900 mb-1">Check out</div>
                   <div className="text-base font-medium text-gray-600">Add dates</div>
                 </div>
-                <div className="hidden md:block w-px h-8 bg-gray-300"></div>
-                <div className="hidden md:block flex-1 px-4 py-3">
-                  <div className="text-sm font-bold text-gray-900 mb-1">Who</div>
-                  <div className="text-base font-medium text-gray-600">Add guests</div>
+                <div className="flex-1 min-w-0 px-3 py-2 md:px-4 md:py-3 flex items-center justify-between gap-3">
+                  <div>
+                    <div className="text-sm font-bold text-gray-900 mb-1">Who</div>
+                    <div className="text-base font-medium text-gray-600">Add guests</div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/villas')}
+                    className="bg-airbnb-red hover:bg-airbnb-red-dark text-white p-3 rounded-full shrink-0 btn-primary-motion"
+                    aria-label="Search villas"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => navigate('/villas')}
-                  className="bg-airbnb-red hover:bg-airbnb-red-dark text-white p-3 rounded-full ml-2 btn-primary-motion"
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </button>
               </div>
             </div>
           </AnimatedSection>
@@ -1486,7 +1536,7 @@ const HomePage = () => {
             {BRAND_TAGLINE}. Every card is a separate villa we manage—tap to see location, amenities, and rates.
           </p>
         </AnimatedSection>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {demoRooms.filter((room) => room.status === 'available').map((room, index) => (
             <AnimatedSection key={room.id} delay={index * 120} variant="fade-up">
             <div

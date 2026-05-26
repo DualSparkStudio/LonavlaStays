@@ -370,7 +370,7 @@ const BookingPage: React.FC = () => {
             {/* Summary */}
             <div className="lg:col-span-2">
               <AnimatedSection delay={80} variant="slide-left">
-                <div className="sticky top-24 bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
+                <div className="lg:sticky lg:top-24 bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
                   <img
                     src={villa.images[0]}
                     alt={villa.name}

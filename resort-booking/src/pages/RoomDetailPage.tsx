@@ -122,7 +122,7 @@ const RoomDetailPage: React.FC = () => {
           </div>
 
           <AnimatedSection delay={200} variant="slide-left" className="lg:col-span-1">
-            <div className="sticky top-24 bg-white rounded-2xl border border-gray-200 shadow-lg p-6">
+            <div className="lg:sticky lg:top-24 bg-white rounded-2xl border border-gray-200 shadow-lg p-6">
               <p className="text-2xl font-bold text-gray-900 mb-1">
                 {formatPrice(room.price_per_night)}
                 <span className="text-base font-medium text-gray-600"> / night</span>

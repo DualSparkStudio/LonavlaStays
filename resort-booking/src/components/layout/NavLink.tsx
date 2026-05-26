@@ -11,6 +11,8 @@ type NavLinkProps = {
   onClick?: () => void;
   className?: string;
   index?: number;
+  /** Icon above label, tighter spacing for header center nav */
+  compact?: boolean;
 };
 
 const NavLink: React.FC<NavLinkProps> = ({
@@ -21,13 +23,14 @@ const NavLink: React.FC<NavLinkProps> = ({
   onClick,
   className,
   index = 0,
+  compact = false,
 }) => (
   <Link
     to={href}
     onClick={onClick}
     style={{ animationDelay: `${200 + index * 110}ms` }}
     className={cn(
-      'nav-link-item nav-link-enter group inline-flex flex-col items-center pb-0.5 transition-colors duration-300',
+      'nav-link-item nav-link-enter group inline-flex flex-col items-center px-2 xl:px-3 pb-0.5 transition-colors duration-300',
       active
         ? 'text-[#222222] dark:text-white'
         : 'text-[#717171] dark:text-gray-400',
@@ -35,17 +38,27 @@ const NavLink: React.FC<NavLinkProps> = ({
       className
     )}
   >
-    <span className="inline-flex items-center gap-2">
+    <span
+      className={cn(
+        'inline-flex items-center',
+        compact ? 'flex-col gap-0.5' : 'flex-row gap-2'
+      )}
+    >
       <span className="nav-icon-wrap">
         <Icon
           className={cn(
-            navIconClassName,
-            'nav-icon-motion drop-shadow-sm motion-safe:animate-nav-pop'
+            compact ? 'h-8 w-8 xl:h-10 xl:w-10' : navIconClassName,
+            'nav-icon-motion shrink-0 drop-shadow-sm motion-safe:animate-nav-pop'
           )}
           style={{ animationDelay: `${280 + index * 110}ms` }}
         />
       </span>
-      <span className="nav-link-label text-base leading-none font-bold transition-transform duration-300">
+      <span
+        className={cn(
+          'nav-link-label leading-none font-bold transition-transform duration-300',
+          compact ? 'text-xs xl:text-sm' : 'text-base'
+        )}
+      >
         {label}
       </span>
     </span>

@@ -177,8 +177,8 @@ const UserBookingsPage: React.FC = () => {
         </AnimatedSection>
 
         {/* Tab Navigation */}
-        <div className="border-b border-gray-200 mb-8">
-          <nav className="-mb-px flex space-x-8">
+        <div className="border-b border-gray-200 mb-8 -mx-4 px-4 sm:mx-0 sm:px-0">
+          <nav className="-mb-px flex gap-6 overflow-x-auto scrollbar-hide pb-px">
             {[
               { key: 'all', label: 'All Bookings', count: bookings.length },
               { key: 'upcoming', label: 'Upcoming', count: bookings.filter(b => b.status === 'upcoming').length },
@@ -221,31 +221,31 @@ const UserBookingsPage: React.FC = () => {
           <div className="space-y-6">
             {filteredBookings.map((booking) => (
               <div key={booking.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="p-6">
-                  <div className="flex items-start space-x-4">
+                <div className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-4">
                     {/* Room Image */}
-                    <div className="flex-shrink-0">
+                    <div className="shrink-0">
                       <img
                         src={booking.roomImage}
                         alt={booking.roomName}
-                        className="h-24 w-32 rounded-lg object-cover"
+                        className="h-40 w-full sm:h-24 sm:w-32 rounded-lg object-cover"
                       />
                     </div>
 
                     {/* Booking Details */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between">
-                        <div>
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                        <div className="min-w-0">
                           <h3 className="text-lg font-semibold text-gray-900 mb-1">
                             {booking.roomName}
                           </h3>
                           <div className="flex items-center text-sm text-gray-600 mb-2">
-                            <MapPinIcon className="h-4 w-4 mr-1" />
+                            <MapPinIcon className="h-4 w-4 mr-1 shrink-0" />
                             {booking.location}
                           </div>
-                          <div className="flex items-center space-x-4 text-sm text-gray-600">
+                          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 text-sm text-gray-600">
                             <div className="flex items-center">
-                              <CalendarDaysIcon className="h-4 w-4 mr-1" />
+                              <CalendarDaysIcon className="h-4 w-4 mr-1 shrink-0" />
                               {new Date(booking.checkIn).toLocaleDateString('en-US', { 
                                 month: 'short', 
                                 day: 'numeric' 
@@ -256,13 +256,13 @@ const UserBookingsPage: React.FC = () => {
                               })}
                             </div>
                             <div className="flex items-center">
-                              <UserGroupIcon className="h-4 w-4 mr-1" />
+                              <UserGroupIcon className="h-4 w-4 mr-1 shrink-0" />
                               {getTotalGuests(booking.guests)}
                             </div>
                           </div>
                         </div>
 
-                        <div className="text-right">
+                        <div className="sm:text-right shrink-0">
                           <div className="flex items-center justify-end mb-2">
                             <span className={cn(
                               'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
@@ -282,7 +282,7 @@ const UserBookingsPage: React.FC = () => {
                       </div>
 
                       {/* Actions */}
-                      <div className="mt-4 flex items-center space-x-3">
+                      <div className="mt-4 flex flex-wrap gap-2 sm:gap-3">
                         <Button
                           variant="outline"
                           size="sm"
