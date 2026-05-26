@@ -32,8 +32,8 @@ const NavLink: React.FC<NavLinkProps> = ({
     className={cn(
       'nav-link-item nav-link-enter group inline-flex flex-col items-center px-2 xl:px-3 pb-0.5 transition-colors duration-300',
       active
-        ? 'text-[#222222] dark:text-white'
-        : 'text-[#717171] dark:text-gray-400',
+        ? 'text-[#222222]'
+        : 'text-[#717171]',
       'hover:text-airbnb-red',
       className
     )}
@@ -65,7 +65,7 @@ const NavLink: React.FC<NavLinkProps> = ({
       className={cn(
         'mt-2 h-0.5 w-full rounded-full transition-all duration-300',
         active
-          ? 'bg-[#222222] dark:bg-white opacity-100 group-hover:bg-airbnb-red dark:group-hover:bg-airbnb-red'
+          ? 'bg-[#222222] opacity-100 group-hover:bg-airbnb-red'
           : 'bg-transparent opacity-0 group-hover:opacity-100 group-hover:bg-airbnb-red group-hover:scale-x-110'
       )}
       aria-hidden

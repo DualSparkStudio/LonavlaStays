@@ -23,7 +23,7 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children, currentPage }) =>
   const page = currentPage ?? resolveCurrentPage(pathname);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col transition-colors duration-300">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       <PublicHeader currentPage={page} />
       <main className="flex-1">{children}</main>
       <PublicFooter />

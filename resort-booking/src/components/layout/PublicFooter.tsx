@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { RESORT_NAME, RESORT_ADDRESS, RESORT_PHONE, RESORT_EMAIL } from '../../data/resort';
 
 const PublicFooter: React.FC = () => (
-  <footer className="bg-gray-50 text-gray-900 border-t border-gray-200 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-800 transition-colors duration-300">
+  <footer className="bg-gray-50 text-gray-900 border-t border-gray-200">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
         <div className="col-span-1 md:col-span-2">
           <span className="font-heading text-xl text-[#FF385C] uppercase tracking-wide">{RESORT_NAME}</span>
-          <p className="text-gray-600 dark:text-gray-400 mb-4 mt-3 max-w-md">
+          <p className="text-gray-600 mb-4 mt-3 max-w-md">
             We manage and book a collection of private luxury villas across Lonavala—each property with its own address and character.
           </p>
         </div>
@@ -23,7 +23,7 @@ const PublicFooter: React.FC = () => (
               { name: 'Contact', path: '/contact' },
             ].map((link) => (
               <li key={link.name}>
-                <Link to={link.path} className="text-gray-600 dark:text-gray-400 hover:text-airbnb-red transition-colors font-medium">
+                <Link to={link.path} className="text-gray-600 hover:text-airbnb-red transition-colors font-medium">
                   {link.name}
                 </Link>
               </li>
@@ -33,7 +33,7 @@ const PublicFooter: React.FC = () => (
 
         <div>
           <h3 className="font-heading text-lg mb-4 uppercase tracking-wide">Contact</h3>
-          <div className="space-y-2 text-gray-600 dark:text-gray-400 font-medium">
+          <div className="space-y-2 text-gray-600 font-medium">
             <p>📍 {RESORT_ADDRESS}</p>
             <p>📞 {RESORT_PHONE}</p>
             <p>✉️ {RESORT_EMAIL}</p>
@@ -41,7 +41,7 @@ const PublicFooter: React.FC = () => (
         </div>
       </div>
 
-      <div className="border-t border-gray-300 dark:border-gray-700 mt-8 pt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-center sm:text-left text-gray-600 dark:text-gray-400 text-sm">
+      <div className="border-t border-gray-300 mt-8 pt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-center sm:text-left text-gray-600 text-sm">
         <p>© {new Date().getFullYear()} {RESORT_NAME}. All rights reserved.</p>
         <p>
           Crafted by{' '}

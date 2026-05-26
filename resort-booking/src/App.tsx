@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AnimatedSection from './components/ui/AnimatedSection';
 import PublicLayout from './components/layout/PublicLayout';
 import ScrollToTop from './components/layout/ScrollToTop';
-import { ThemeProvider } from './context/ThemeContext';
 import { BRAND_TAGLINE, demoRooms } from './data/resort';
 import RoomsPage from './pages/RoomsPage';
 import RoomDetailPage from './pages/RoomDetailPage';
@@ -1649,7 +1648,6 @@ const LegacyRoomRedirect = () => {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
       <Router>
         <ScrollToTop />
         <Routes>
@@ -1687,7 +1685,6 @@ function App() {
           } />
         </Routes>
       </Router>
-      </ThemeProvider>
     </QueryClientProvider>
   );
 }
