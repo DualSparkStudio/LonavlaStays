@@ -50,7 +50,6 @@ const NavLink: React.FC<NavLinkProps> = ({
             compact ? 'h-8 w-8 xl:h-10 xl:w-10' : navIconClassName,
             'nav-icon-motion shrink-0 drop-shadow-sm motion-safe:animate-nav-pop'
           )}
-          style={{ animationDelay: `${280 + index * 110}ms` }}
         />
       </span>
       <span

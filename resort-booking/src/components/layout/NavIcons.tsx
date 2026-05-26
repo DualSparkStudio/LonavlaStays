@@ -2,6 +2,7 @@ import React from 'react';
 
 type NavIconProps = {
   className?: string;
+  style?: React.CSSProperties;
 };
 
 export const navIconClassName = 'h-11 w-11 shrink-0';

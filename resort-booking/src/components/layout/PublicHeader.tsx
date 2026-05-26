@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import NavLink from './NavLink';
-import { mainNavConfig, navIconClassName } from './NavIcons';
+import { mainNavConfig } from './NavIcons';
 import { RESORT_NAME } from '../../data/resort';
 import { cn } from '../../utils/cn';
 

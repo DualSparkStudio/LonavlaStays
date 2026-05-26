@@ -1,7 +1,11 @@
+# Prefer root netlify.toml (base = resort-booking). Kept for local Netlify CLI runs in this folder.
 [build]
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
 
 [[redirects]]
   from = "/api/create-razorpay-order"
