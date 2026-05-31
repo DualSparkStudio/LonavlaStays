@@ -24,6 +24,8 @@ export type Room = {
   status: 'available' | 'maintenance' | 'occupied';
   amenities: string[];
   images: string[];
+  /** Google Maps embed iframe src, embed URL, or share link */
+  mapEmbedUrl?: string;
 };
 
 export const demoRooms: Room[] = [

@@ -7,6 +7,7 @@ import {
   PhoneIcon,
   HomeModernIcon,
 } from '@heroicons/react/24/outline';
+import LocationMapSection from '../components/maps/LocationMapSection';
 import PublicLayout from '../components/layout/PublicLayout';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import Button from '../components/ui/Button';
@@ -166,6 +167,14 @@ const PropertyForSaleDetailPage: React.FC = () => {
                   </div>
                 ))}
               </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={200}>
+              <LocationMapSection
+                mapEmbedUrl={property.mapEmbedUrl}
+                address={property.address}
+                location={property.location}
+              />
             </AnimatedSection>
           </div>
 

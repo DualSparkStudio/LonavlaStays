@@ -18,6 +18,7 @@ const emptyRoom = (): Omit<Room, 'id'> => ({
   status: 'available',
   amenities: [],
   images: [''],
+  mapEmbedUrl: '',
 });
 
 const AdminRoomsPage: React.FC = () => {
@@ -61,6 +62,7 @@ const AdminRoomsPage: React.FC = () => {
       ...draft,
       amenities: draft.amenities.filter(Boolean),
       images: draft.images.filter((img) => img.trim()),
+      mapEmbedUrl: draft.mapEmbedUrl?.trim() || undefined,
     };
     if (payload.images.length === 0) {
       window.alert('Add at least one image URL.');
@@ -176,6 +178,18 @@ const AdminRoomsPage: React.FC = () => {
           </AdminFormField>
           <AdminFormField label="Image URLs" hint="One image URL per line — first image is used as the cover photo">
             <textarea value={draft.images.join('\n')} onChange={(e) => setDraft({ ...draft, images: e.target.value.split('\n') })} rows={3} className={adminInputClass} />
+          </AdminFormField>
+          <AdminFormField
+            label="Google Maps embed"
+            hint="In Google Maps: Share → Embed a map → copy the iframe code or embed URL. Customers can open directions in Google Maps from the villa page."
+          >
+            <textarea
+              value={draft.mapEmbedUrl ?? ''}
+              onChange={(e) => setDraft({ ...draft, mapEmbedUrl: e.target.value })}
+              rows={3}
+              placeholder='Paste embed code, e.g. <iframe src="https://www.google.com/maps/embed?pb=...">'
+              className={adminInputClass}
+            />
           </AdminFormField>
           <div className="flex gap-3">
             <button type="submit" className="bg-red-500 text-white px-6 py-2 rounded-lg font-bold">Save</button>

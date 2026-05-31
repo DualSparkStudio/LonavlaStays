@@ -20,6 +20,8 @@ export type PropertyForSale = {
   status: 'available' | 'reserved' | 'sold';
   highlights: string[];
   images: string[];
+  /** Google Maps embed iframe src, embed URL, or share link */
+  mapEmbedUrl?: string;
 };
 
 export const propertiesForSale: PropertyForSale[] = [

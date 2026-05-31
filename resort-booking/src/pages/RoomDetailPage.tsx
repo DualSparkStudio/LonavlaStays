@@ -4,6 +4,7 @@ import { ChevronLeftIcon, MapPinIcon, UserGroupIcon } from '@heroicons/react/24/
 import PublicLayout from '../components/layout/PublicLayout';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import Button from '../components/ui/Button';
+import LocationMapSection from '../components/maps/LocationMapSection';
 import { formatPrice } from '../data/resort';
 import { useSiteData } from '../context/SiteDataContext';
 
@@ -120,6 +121,14 @@ const RoomDetailPage: React.FC = () => {
                   </div>
                 ))}
               </div>
+            </AnimatedSection>
+
+            <AnimatedSection delay={200}>
+              <LocationMapSection
+                mapEmbedUrl={room.mapEmbedUrl}
+                address={room.address}
+                location={room.location}
+              />
             </AnimatedSection>
           </div>
 

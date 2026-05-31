@@ -17,6 +17,7 @@ const emptyProperty = (): Omit<PropertyForSale, 'id'> => ({
   status: 'available',
   highlights: [],
   images: [''],
+  mapEmbedUrl: '',
 });
 
 const AdminForSalePage: React.FC = () => {
@@ -60,6 +61,7 @@ const AdminForSalePage: React.FC = () => {
       ...draft,
       highlights: draft.highlights.filter(Boolean),
       images: draft.images.filter((img) => img.trim()),
+      mapEmbedUrl: draft.mapEmbedUrl?.trim() || undefined,
     };
     if (isNew) {
       addPropertyForSale(payload);
@@ -161,6 +163,18 @@ const AdminForSalePage: React.FC = () => {
           </AdminFormField>
           <AdminFormField label="Image URLs" hint="One image URL per line — first image is the cover photo">
             <textarea value={draft.images.join('\n')} onChange={(e) => setDraft({ ...draft, images: e.target.value.split('\n') })} rows={3} className={adminInputClass} />
+          </AdminFormField>
+          <AdminFormField
+            label="Google Maps embed"
+            hint="In Google Maps: Share → Embed a map → copy the iframe code or embed URL. Shown on the property page with a link to open Google Maps."
+          >
+            <textarea
+              value={draft.mapEmbedUrl ?? ''}
+              onChange={(e) => setDraft({ ...draft, mapEmbedUrl: e.target.value })}
+              rows={3}
+              placeholder='Paste embed code, e.g. <iframe src="https://www.google.com/maps/embed?pb=...">'
+              className={adminInputClass}
+            />
           </AdminFormField>
           <div className="flex gap-3">
             <button type="submit" className="bg-red-500 text-white px-6 py-2 rounded-lg font-bold">
