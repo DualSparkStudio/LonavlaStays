@@ -3,89 +3,75 @@ import { Link } from 'react-router-dom';
 import PublicLayout from '../components/layout/PublicLayout';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import Button from '../components/ui/Button';
-import { BRAND_TAGLINE, RESORT_LOCATION, RESORT_NAME } from '../data/resort';
+import { useSiteData } from '../context/SiteDataContext';
 
-const highlights = [
-  {
-    title: 'Multiple villas, one brand',
-    text: 'We manage a portfolio of standalone villas—each with its own address, style, and amenities—under trusted Lonavala hospitality.',
-  },
-  {
-    title: 'Locally rooted',
-    text: 'Our on-ground team lives in Lonavala. We match you to the right villa and share the best trails, views, and seasonal tips.',
-  },
-  {
-    title: 'End-to-end management',
-    text: 'From booking and housekeeping to maintenance and guest support, we run every villa so owners and guests enjoy a seamless stay.',
-  },
-];
+const AboutPage: React.FC = () => {
+  const { settings } = useSiteData();
 
-const AboutPage: React.FC = () => (
-  <PublicLayout currentPage="about">
-    <section className="relative bg-white overflow-hidden">
-      <div className="hero-glow pointer-events-none absolute inset-0" aria-hidden />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <AnimatedSection variant="slide-right">
-            <h1 className="font-heading text-4xl md:text-5xl text-gray-900 mb-4">About {RESORT_NAME}</h1>
-            <p className="text-xl text-gray-600 mb-4">
-              {RESORT_NAME} {BRAND_TAGLINE.toLowerCase()}. We are not a single hotel—we curate, operate,
-              and book multiple private villas across {RESORT_LOCATION}, each managed as its own property.
-            </p>
-            <p className="text-lg text-gray-600">
-              Whether you need one villa for a weekend or want to understand how we manage an entire portfolio,
-              our team handles reservations, housekeeping, and guest care villa by villa.
-            </p>
-          </AnimatedSection>
-          <AnimatedSection variant="scale-in" delay={150}>
-            <img
-              src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=900&h=600&fit=crop"
-              alt="Luxury villa in Lonavala hills"
-              className="rounded-2xl shadow-card-hover w-full h-80 object-cover"
-            />
-          </AnimatedSection>
+  return (
+    <PublicLayout currentPage="about">
+      <section className="relative bg-white overflow-hidden">
+        <div className="hero-glow pointer-events-none absolute inset-0" aria-hidden />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 relative">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <AnimatedSection variant="slide-right">
+              <h1 className="font-heading text-4xl md:text-5xl text-gray-900 mb-4">About {settings.resortName}</h1>
+              {settings.aboutParagraphs.map((para, i) => (
+                <p key={i} className={i === 0 ? 'text-xl text-gray-600 mb-4' : 'text-lg text-gray-600 mb-4'}>
+                  {para}
+                </p>
+              ))}
+            </AnimatedSection>
+            <AnimatedSection variant="scale-in" delay={150}>
+              <img
+                src={settings.aboutImage}
+                alt="Luxury villa in Lonavala hills"
+                className="rounded-2xl shadow-card-hover w-full h-80 object-cover"
+              />
+            </AnimatedSection>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-      <AnimatedSection className="text-center mb-10">
-        <h2 className="font-heading text-3xl text-gray-900 mb-2">What makes us different</h2>
-        <p className="text-lg text-gray-600">Many villas. One team. Handpicked hill escapes.</p>
-      </AnimatedSection>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {highlights.map((item, index) => (
-          <AnimatedSection key={item.title} delay={index * 120}>
-            <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm h-full hover:shadow-card-hover transition-shadow duration-300">
-              <h3 className="font-heading text-xl text-gray-900 mb-3 uppercase tracking-wide">{item.title}</h3>
-              <p className="text-base text-gray-600">{item.text}</p>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <AnimatedSection className="text-center mb-10">
+          <h2 className="font-heading text-3xl text-gray-900 mb-2">What makes us different</h2>
+          <p className="text-lg text-gray-600">Many villas. One team. Handpicked hill escapes.</p>
+        </AnimatedSection>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {settings.aboutHighlights.map((item, index) => (
+            <AnimatedSection key={item.title} delay={index * 120}>
+              <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm h-full hover:shadow-card-hover transition-shadow duration-300">
+                <h3 className="font-heading text-xl text-gray-900 mb-3 uppercase tracking-wide">{item.title}</h3>
+                <p className="text-base text-gray-600">{item.text}</p>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+      </section>
+
+      <section className="bg-gray-100 py-14">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <AnimatedSection>
+            <h2 className="font-heading text-3xl text-gray-900 mb-4">Plan your stay</h2>
+            <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto">
+              Browse our villas, compare locations and amenities, or contact us—we will help you pick the right property.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link to="/villas">
+                <Button size="lg" className="rounded-full btn-primary-motion">View villas</Button>
+              </Link>
+              <Link to="/contact">
+                <Button variant="outline" size="lg" className="rounded-full">
+                  Contact us
+                </Button>
+              </Link>
             </div>
           </AnimatedSection>
-        ))}
-      </div>
-    </section>
-
-    <section className="bg-gray-100 py-14">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <AnimatedSection>
-          <h2 className="font-heading text-3xl text-gray-900 mb-4">Plan your stay</h2>
-          <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto">
-            Browse our villas, compare locations and amenities, or contact us—we will help you pick the right property.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/villas">
-              <Button size="lg" className="rounded-full btn-primary-motion">View villas</Button>
-            </Link>
-            <Link to="/contact">
-              <Button variant="outline" size="lg" className="rounded-full">
-                Contact us
-              </Button>
-            </Link>
-          </div>
-        </AnimatedSection>
-      </div>
-    </section>
-  </PublicLayout>
-);
+        </div>
+      </section>
+    </PublicLayout>
+  );
+};
 
 export default AboutPage;

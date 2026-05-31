@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import NavLink from './NavLink';
 import { mainNavConfig } from './NavIcons';
-import { RESORT_NAME } from '../../data/resort';
+import { useSiteData } from '../../context/SiteDataContext';
 import { cn } from '../../utils/cn';
 
 type PublicHeaderProps = {
@@ -11,6 +11,7 @@ type PublicHeaderProps = {
 };
 
 const PublicHeader: React.FC<PublicHeaderProps> = ({ currentPage = 'home' }) => {
+  const { settings } = useSiteData();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
@@ -49,7 +50,6 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ currentPage = 'home' }) => 
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="relative flex items-center justify-between min-h-[4.5rem] py-2 lg:py-0 lg:h-20 gap-3">
-          {/* Logo — left */}
           <Link
             to="/"
             className="nav-link-enter relative z-10 flex items-center min-w-0 max-w-[58%] sm:max-w-[48%] lg:max-w-[28%] shrink-0 transition-transform duration-300 hover:scale-[1.02]"
@@ -68,11 +68,10 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ currentPage = 'home' }) => 
               />
             </svg>
             <span className="font-heading ml-2 text-sm sm:text-lg lg:text-xl text-[#FF385C] uppercase tracking-wide truncate">
-              {RESORT_NAME}
+              {settings.resortName}
             </span>
           </Link>
 
-          {/* Nav — centered (large screens only) */}
           <nav
             className="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-1 xl:gap-3 pointer-events-none"
             aria-label="Main"
@@ -92,7 +91,6 @@ const PublicHeader: React.FC<PublicHeaderProps> = ({ currentPage = 'home' }) => 
             </div>
           </nav>
 
-          {/* Book Now + menu — right */}
           <div className="relative z-10 flex items-center justify-end gap-2 sm:gap-3 shrink-0">
             <Link
               to="/villas"

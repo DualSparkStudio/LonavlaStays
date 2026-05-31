@@ -4,14 +4,11 @@ import { EnvelopeIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/outline
 import PublicLayout from '../components/layout/PublicLayout';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import Button from '../components/ui/Button';
-import {
-  RESORT_ADDRESS,
-  RESORT_EMAIL,
-  RESORT_PHONE,
-} from '../data/resort';
+import { useSiteData } from '../context/SiteDataContext';
 
 const ContactPage: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const { settings, addContactMessage } = useSiteData();
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     name: '',
@@ -41,6 +38,13 @@ const ContactPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    addContactMessage({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      subject: form.subject,
+      message: form.message,
+    });
     setSubmitted(true);
   };
 
@@ -50,10 +54,7 @@ const ContactPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <AnimatedSection>
             <h1 className="font-heading text-4xl md:text-5xl text-gray-900 mb-3">Contact us</h1>
-            <p className="text-xl text-gray-600 max-w-2xl">
-              Questions about a villa stay, a plot or villa for sale, availability, or directions? Our team
-              manages every property in our collection.
-            </p>
+            <p className="text-xl text-gray-600 max-w-2xl">{settings.contactPageSubtitle}</p>
           </AnimatedSection>
         </div>
       </div>
@@ -62,9 +63,9 @@ const ContactPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
           <AnimatedSection className="lg:col-span-1 space-y-6">
             {[
-              { icon: MapPinIcon, label: 'Reservations office', value: RESORT_ADDRESS },
-              { icon: PhoneIcon, label: 'Phone', value: RESORT_PHONE },
-              { icon: EnvelopeIcon, label: 'Email', value: RESORT_EMAIL },
+              { icon: MapPinIcon, label: 'Reservations office', value: settings.resortAddress },
+              { icon: PhoneIcon, label: 'Phone', value: settings.resortPhone },
+              { icon: EnvelopeIcon, label: 'Email', value: settings.resortEmail },
             ].map((item) => (
               <div
                 key={item.label}

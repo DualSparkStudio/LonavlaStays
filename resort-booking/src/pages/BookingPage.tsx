@@ -18,10 +18,14 @@ import AnimatedSection from '../components/ui/AnimatedSection';
 import Button from '../components/ui/Button';
 import Input from '../components/ui/Input';
 import Modal from '../components/ui/Modal';
-import { formatPrice, getRoomById, RESORT_NAME } from '../data/resort';
+import { formatPrice } from '../data/resort';
+import { useSiteData } from '../context/SiteDataContext';
 import {
   createRazorpayOrder,
+  getPaymentModeLabel,
   handleRazorpayError,
+  isPaymentDemoMode,
+  isRazorpayTestKey,
   openRazorpayCheckout,
   verifyRazorpayPayment,
 } from '../lib/razorpay';
@@ -42,6 +46,7 @@ const toDateInputValue = (date: Date) => format(date, 'yyyy-MM-dd');
 const BookingPage: React.FC = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
+  const { getRoomById, settings, addBooking } = useSiteData();
   const villa = roomId ? getRoomById(roomId) : undefined;
 
   const [checkIn, setCheckIn] = useState(toDateInputValue(addDays(new Date(), 1)));
@@ -140,6 +145,19 @@ const BookingPage: React.FC = () => {
         orderId: payment.razorpay_order_id,
         paymentId: payment.razorpay_payment_id,
         signature: payment.razorpay_signature,
+      });
+
+      addBooking({
+        bookingRef: receipt,
+        roomId: villa.id,
+        roomName: villa.name,
+        guestName: `${data.firstName} ${data.lastName}`,
+        guestEmail: data.email,
+        checkIn,
+        checkOut,
+        guests: adults + children,
+        total: pricing.total,
+        status: 'confirmed',
       });
 
       setBookingId(receipt);
@@ -312,7 +330,7 @@ const BookingPage: React.FC = () => {
                         className="mt-1 h-4 w-4 text-airbnb-red focus:ring-airbnb-red border-gray-300 rounded"
                       />
                       <p className="text-sm text-gray-600">
-                        I agree to the cancellation policy and authorize {RESORT_NAME} to process this
+                        I agree to the cancellation policy and authorize {settings.resortName} to process this
                         reservation request.
                       </p>
                     </div>
@@ -327,6 +345,23 @@ const BookingPage: React.FC = () => {
               <AnimatedSection delay={150}>
                 <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
                   <h2 className="font-heading text-2xl text-gray-900 mb-6 uppercase tracking-wide">Payment</h2>
+
+                  {(isPaymentDemoMode || isRazorpayTestKey()) && (
+                    <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                      <p className="font-semibold">{getPaymentModeLabel()}</p>
+                      {isPaymentDemoMode ? (
+                        <p className="mt-1 text-amber-800">
+                          Click pay to confirm a simulated booking — no Razorpay account or card needed.
+                        </p>
+                      ) : (
+                        <p className="mt-1 text-amber-800">
+                          Use Razorpay test card <span className="font-mono">4111 1111 1111 1111</span> with any
+                          future expiry and CVV.
+                        </p>
+                      )}
+                    </div>
+                  )}
+
                   <div className="border border-gray-200 rounded-xl p-4 bg-gray-50">
                     <div className="flex items-center gap-3">
                       <CreditCardIcon className="h-6 w-6 text-gray-600" />
@@ -360,10 +395,14 @@ const BookingPage: React.FC = () => {
                 className="rounded-full btn-primary-motion"
               >
                 {isProcessing
-                  ? 'Opening Razorpay…'
+                  ? isPaymentDemoMode
+                    ? 'Processing test payment…'
+                    : 'Opening Razorpay…'
                   : nights < 1
                     ? 'Select valid dates'
-                    : `Pay ${formatPrice(pricing.total)} with Razorpay`}
+                    : isPaymentDemoMode
+                      ? `Complete test booking · ${formatPrice(pricing.total)}`
+                      : `Pay ${formatPrice(pricing.total)} with Razorpay`}
               </Button>
             </div>
 
@@ -433,7 +472,7 @@ const BookingPage: React.FC = () => {
                       </p>
                       <p className="flex items-center gap-2">
                         <ShieldCheckIcon className="h-4 w-4 text-green-600" />
-                        Managed by {RESORT_NAME}
+                        Managed by {settings.resortName}
                       </p>
                     </div>
                   </div>

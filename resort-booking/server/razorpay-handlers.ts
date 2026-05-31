@@ -1,13 +1,22 @@
 import crypto from 'node:crypto';
 import Razorpay from 'razorpay';
 
+/** Local demo checkout — no Razorpay account required. Never enable on production. */
+export function isPaymentDemoMode(): boolean {
+  return process.env.PAYMENT_DEMO_MODE === 'true';
+}
+
 export function getRazorpayCredentials() {
+  if (isPaymentDemoMode()) {
+    return { key_id: 'rzp_test_demo', key_secret: 'demo_secret' };
+  }
+
   const key_id = process.env.RAZORPAY_KEY_ID || process.env.VITE_RAZORPAY_KEY_ID;
   const key_secret = process.env.RAZORPAY_KEY_SECRET;
 
-  if (!key_id || !key_secret) {
+  if (!key_id || !key_secret || key_id.includes('xxxxxxxx') || key_secret.includes('your_')) {
     throw new Error(
-      'Razorpay is not configured. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in your environment.',
+      'Razorpay test keys are not configured. Add rzp_test_ keys to .env.local, or set PAYMENT_DEMO_MODE=true for local demo checkout.',
     );
   }
 
@@ -27,13 +36,22 @@ export interface CreateOrderInput {
 }
 
 export async function createRazorpayOrder(input: CreateOrderInput) {
-  const { key_id } = getRazorpayCredentials();
   const amountPaise = Math.round(input.amountInr * 100);
 
   if (amountPaise < 100) {
     throw new Error('Amount must be at least ₹1');
   }
 
+  if (isPaymentDemoMode()) {
+    return {
+      keyId: 'rzp_test_demo',
+      orderId: `order_demo_${Date.now()}`,
+      amount: amountPaise,
+      currency: 'INR',
+    };
+  }
+
+  const { key_id } = getRazorpayCredentials();
   const client = getClient();
   const order = await client.orders.create({
     amount: amountPaise,
@@ -55,6 +73,10 @@ export function verifyRazorpaySignature(
   paymentId: string,
   signature: string,
 ): boolean {
+  if (isPaymentDemoMode() && paymentId.startsWith('pay_demo_') && signature === 'demo_signature') {
+    return orderId.startsWith('order_demo_');
+  }
+
   const { key_secret } = getRazorpayCredentials();
   const expected = crypto
     .createHmac('sha256', key_secret)

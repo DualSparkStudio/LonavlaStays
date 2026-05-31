@@ -1,6 +1,21 @@
-import { RESORT_NAME } from '../data/resort';
+import { formatPrice, RESORT_NAME } from '../data/resort';
 
 export const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined;
+
+/** Simulated checkout locally — no real charge. Set PAYMENT_DEMO_MODE=true in .env.local */
+export const isPaymentDemoMode = import.meta.env.VITE_PAYMENT_DEMO_MODE === 'true';
+
+/** True when using Razorpay dashboard test keys (rzp_test_…) */
+export function isRazorpayTestKey(keyId?: string): boolean {
+  const key = keyId || RAZORPAY_KEY_ID;
+  return Boolean(key?.startsWith('rzp_test_'));
+}
+
+export function getPaymentModeLabel(): string {
+  if (isPaymentDemoMode) return 'Demo test mode — no real payment';
+  if (isRazorpayTestKey()) return 'Razorpay test mode — use test cards/UPI only';
+  return 'Live payment';
+}
 
 const CHECKOUT_SCRIPT = 'https://checkout.razorpay.com/v1/checkout.js';
 
@@ -101,11 +116,36 @@ export async function verifyRazorpayPayment(params: {
   await parseApiResponse<{ success: boolean }>(response);
 }
 
+async function openDemoCheckout(params: RazorpayCheckoutParams): Promise<RazorpaySuccessResponse> {
+  const amountInr = params.order.amount / 100;
+  const confirmed = window.confirm(
+    `Demo test payment\n\n${params.description}\nAmount: ${formatPrice(amountInr)}\n\nNo real money will be charged. Continue?`,
+  );
+
+  if (!confirmed) {
+    throw new Error('Payment cancelled');
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, 600));
+
+  return {
+    razorpay_order_id: params.order.orderId,
+    razorpay_payment_id: `pay_demo_${Date.now()}`,
+    razorpay_signature: 'demo_signature',
+  };
+}
+
 export async function openRazorpayCheckout(
   params: RazorpayCheckoutParams,
 ): Promise<RazorpaySuccessResponse> {
+  if (isPaymentDemoMode || params.order.keyId === 'rzp_test_demo') {
+    return openDemoCheckout(params);
+  }
+
   if (!RAZORPAY_KEY_ID && !params.order.keyId) {
-    throw new Error('Razorpay key is not configured (VITE_RAZORPAY_KEY_ID)');
+    throw new Error(
+      'Razorpay is not configured. Add test keys to .env.local or enable VITE_PAYMENT_DEMO_MODE=true.',
+    );
   }
 
   await loadRazorpayScript();

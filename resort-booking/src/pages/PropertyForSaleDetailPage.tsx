@@ -13,15 +13,15 @@ import Button from '../components/ui/Button';
 import {
   formatSalePrice,
   getCategoryLabel,
-  getPropertyForSaleById,
   getStatusLabel,
 } from '../data/propertiesForSale';
-import { RESORT_EMAIL, RESORT_NAME, RESORT_PHONE } from '../data/resort';
+import { useSiteData } from '../context/SiteDataContext';
 
 const PropertyForSaleDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [imageIndex, setImageIndex] = useState(0);
+  const { getPropertyForSaleById, settings } = useSiteData();
 
   const property = id ? getPropertyForSaleById(id) : undefined;
 
@@ -48,8 +48,8 @@ const PropertyForSaleDetailPage: React.FC = () => {
     id: property.id,
   }).toString();
 
-  const phoneHref = `tel:${RESORT_PHONE.replace(/\s/g, '')}`;
-  const mailHref = `mailto:${RESORT_EMAIL}?subject=${encodeURIComponent(
+  const phoneHref = `tel:${settings.resortPhone.replace(/\s/g, '')}`;
+  const mailHref = `mailto:${settings.resortEmail}?subject=${encodeURIComponent(
     `Purchase enquiry: ${property.title}`
   )}&body=${encodeURIComponent(
     `Hi,\n\nI am interested in purchasing "${property.title}" (${property.location}).\n\nPlease share pricing details, site visit availability, and required documents.\n\nThank you.`
@@ -180,7 +180,7 @@ const PropertyForSaleDetailPage: React.FC = () => {
 
               <p className="text-base text-gray-600">
                 Interested in this {property.category === 'villa' ? 'villa' : 'plot'}? Contact{' '}
-                {RESORT_NAME} for site visits, title documents, and negotiation support.
+                {settings.resortName} for site visits, title documents, and negotiation support.
               </p>
 
               <Link to={`/contact?${contactQuery}`}>
@@ -192,7 +192,7 @@ const PropertyForSaleDetailPage: React.FC = () => {
               <a href={phoneHref} className="block">
                 <Button variant="outline" fullWidth size="lg" className="rounded-full mb-3">
                   <PhoneIcon className="h-5 w-5 mr-2" />
-                  Call {RESORT_PHONE}
+                  Call {settings.resortPhone}
                 </Button>
               </a>
 

@@ -6,14 +6,15 @@ import {
   formatSalePrice,
   getCategoryLabel,
   getStatusLabel,
-  propertiesForSale,
   type PropertyCategory,
 } from '../data/propertiesForSale';
+import { useSiteData } from '../context/SiteDataContext';
 import { cn } from '../utils/cn';
 
 type CategoryFilter = 'all' | PropertyCategory;
 
 const PropertiesForSalePage: React.FC = () => {
+  const { propertiesForSale, settings } = useSiteData();
   const [searchParams] = useSearchParams();
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>('all');
   const [areaFilter, setAreaFilter] = useState('all');
@@ -49,7 +50,7 @@ const PropertiesForSalePage: React.FC = () => {
       }
       return 0;
     });
-  }, [categoryFilter, areaFilter, sortBy]);
+  }, [categoryFilter, areaFilter, sortBy, propertiesForSale]);
 
   const saleAreas = ['all', ...Array.from(new Set(propertiesForSale.map((p) => p.location)))];
 
@@ -65,11 +66,10 @@ const PropertiesForSalePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <AnimatedSection>
             <h1 className="font-heading text-4xl md:text-5xl text-gray-900 mb-3">
-              Plots &amp; villas for sale
+              {settings.forSalePageTitle}
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl">
-              Own a piece of Lonavala. Browse our curated plots and ready villas—view full galleries and
-              descriptions, then contact us to schedule a visit or request documents.
+              {settings.forSalePageSubtitle}
             </p>
             {(categoryFilter !== 'all' || areaFilter !== 'all') && (
               <p className="mt-3 text-base font-medium text-airbnb-red">

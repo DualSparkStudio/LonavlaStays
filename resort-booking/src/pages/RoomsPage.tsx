@@ -2,9 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import PublicLayout from '../components/layout/PublicLayout';
 import AnimatedSection from '../components/ui/AnimatedSection';
-import { BRAND_TAGLINE, demoRooms, formatPrice } from '../data/resort';
+import { useSiteData } from '../context/SiteDataContext';
+import { formatPrice } from '../data/resort';
 
 const RoomsPage: React.FC = () => {
+  const { rooms, settings } = useSiteData();
   const [searchParams] = useSearchParams();
   const [typeFilter, setTypeFilter] = useState('all');
   const [areaFilter, setAreaFilter] = useState('all');
@@ -25,11 +27,11 @@ const RoomsPage: React.FC = () => {
     return parts.length ? parts.join(' · ') : null;
   }, [searchParams]);
 
-  const roomTypes = ['all', ...Array.from(new Set(demoRooms.map((r) => r.room_type)))];
-  const areas = ['all', ...Array.from(new Set(demoRooms.map((r) => r.location)))];
+  const roomTypes = ['all', ...Array.from(new Set(rooms.map((r) => r.room_type)))];
+  const areas = ['all', ...Array.from(new Set(rooms.map((r) => r.location)))];
 
-  const rooms = useMemo(() => {
-    let list = demoRooms.filter((r) => r.status === 'available');
+  const roomsList = useMemo(() => {
+    let list = rooms.filter((r) => r.status === 'available');
     if (typeFilter !== 'all') {
       list = list.filter((r) => r.room_type === typeFilter);
     }
@@ -45,16 +47,16 @@ const RoomsPage: React.FC = () => {
       if (sortBy === 'price-desc') return b.price_per_night - a.price_per_night;
       return b.rating - a.rating;
     });
-  }, [typeFilter, areaFilter, sortBy, searchParams]);
+  }, [typeFilter, areaFilter, sortBy, searchParams, rooms]);
 
   return (
     <PublicLayout currentPage="villas">
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <AnimatedSection>
-            <h1 className="font-heading text-4xl md:text-5xl text-gray-900 mb-3">Our villas</h1>
+            <h1 className="font-heading text-4xl md:text-5xl text-gray-900 mb-3">{settings.villasPageTitle}</h1>
             <p className="text-xl text-gray-600 max-w-2xl">
-              {BRAND_TAGLINE}. Each listing is a separate private villa—compare locations, capacity, and amenities to find your fit.
+              {settings.villasPageSubtitle}
             </p>
             {searchHint && (
               <p className="mt-3 text-base font-medium text-airbnb-red">
@@ -108,7 +110,7 @@ const RoomsPage: React.FC = () => {
           </div>
         </div>
 
-        {rooms.length === 0 ? (
+        {roomsList.length === 0 ? (
           <div className="text-center py-16 text-gray-600">
             <p className="text-lg font-medium mb-4">No villas match your search.</p>
             <Link to="/villas" className="text-airbnb-red font-bold hover:underline">
@@ -117,7 +119,7 @@ const RoomsPage: React.FC = () => {
           </div>
         ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
-          {rooms.map((room, index) => (
+          {roomsList.map((room, index) => (
             <AnimatedSection key={room.id} delay={index * 100}>
               <Link
                 to={`/villas/${room.id}`}

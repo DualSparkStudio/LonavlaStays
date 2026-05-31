@@ -4,12 +4,14 @@ import { ChevronLeftIcon, MapPinIcon, UserGroupIcon } from '@heroicons/react/24/
 import PublicLayout from '../components/layout/PublicLayout';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import Button from '../components/ui/Button';
-import { formatPrice, getRoomById, RESORT_NAME } from '../data/resort';
+import { formatPrice } from '../data/resort';
+import { useSiteData } from '../context/SiteDataContext';
 
 const RoomDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [imageIndex, setImageIndex] = useState(0);
+  const { getRoomById, settings } = useSiteData();
 
   const room = id ? getRoomById(id) : undefined;
 
@@ -100,7 +102,7 @@ const RoomDetailPage: React.FC = () => {
                 </span>
               </p>
               <p className="text-base text-gray-500 mb-4">
-                Managed by {RESORT_NAME} · ★ {room.rating} ({room.review_count} reviews)
+                Managed by {settings.resortName} · ★ {room.rating} ({room.review_count} reviews)
               </p>
               <p className="text-base text-gray-600 leading-relaxed">{room.description}</p>
             </AnimatedSection>

@@ -2,23 +2,24 @@ import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addDays, format } from 'date-fns';
 import AnimatedSection from '../ui/AnimatedSection';
-import { demoRooms, RESORT_LOCATION } from '../../data/resort';
-import { propertiesForSale } from '../../data/propertiesForSale';
+import { useSiteData } from '../../context/SiteDataContext';
+import { RESORT_LOCATION } from '../../data/resort';
 import { cn } from '../../utils/cn';
 
 type HeroMode = 'stay' | 'buy';
-
-const stayAreas = ['All areas', ...Array.from(new Set(demoRooms.map((r) => r.location)))];
-const buyAreas = [
-  'All areas',
-  ...Array.from(new Set(propertiesForSale.map((p) => p.location))),
-];
 
 const toDateValue = (date: Date) => format(date, 'yyyy-MM-dd');
 
 const HeroExplorer: React.FC = () => {
   const navigate = useNavigate();
+  const { rooms, propertiesForSale, settings } = useSiteData();
   const [mode, setMode] = useState<HeroMode>('stay');
+
+  const stayAreas = ['All areas', ...Array.from(new Set(rooms.map((r) => r.location)))];
+  const buyAreas = [
+    'All areas',
+    ...Array.from(new Set(propertiesForSale.map((p) => p.location))),
+  ];
 
   const [stayArea, setStayArea] = useState('All areas');
   const [checkIn, setCheckIn] = useState(toDateValue(addDays(new Date(), 1)));
@@ -29,8 +30,8 @@ const HeroExplorer: React.FC = () => {
   const [buyArea, setBuyArea] = useState('All areas');
 
   const maxGuests = useMemo(
-    () => Math.max(...demoRooms.map((r) => r.max_guests), 10),
-    []
+    () => Math.max(...rooms.map((r) => r.max_guests), 10),
+    [rooms]
   );
 
   const handleStaySearch = () => {
@@ -93,7 +94,7 @@ const HeroExplorer: React.FC = () => {
         {mode === 'stay' ? (
           <>
             <p className="text-center text-sm text-gray-500 mb-3 px-2">
-              Nightly villa rentals across {RESORT_LOCATION} — pick dates and browse available stays.
+              Nightly villa rentals across {settings.resortLocation || RESORT_LOCATION} — pick dates and browse available stays.
             </p>
             <div className="flex flex-col md:flex-row md:items-end md:divide-x md:divide-gray-300">
               <div className={fieldClass}>
@@ -105,7 +106,7 @@ const HeroExplorer: React.FC = () => {
                 >
                   {stayAreas.map((area) => (
                     <option key={area} value={area}>
-                      {area === 'All areas' ? `All areas · ${RESORT_LOCATION}` : area}
+                      {area === 'All areas' ? `All areas · ${settings.resortLocation || RESORT_LOCATION}` : area}
                     </option>
                   ))}
                 </select>
