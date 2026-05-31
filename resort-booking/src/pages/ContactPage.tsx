@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { EnvelopeIcon, MapPinIcon, PhoneIcon } from '@heroicons/react/24/outline';
 import PublicLayout from '../components/layout/PublicLayout';
 import AnimatedSection from '../components/ui/AnimatedSection';
@@ -6,11 +7,11 @@ import Button from '../components/ui/Button';
 import {
   RESORT_ADDRESS,
   RESORT_EMAIL,
-  RESORT_NAME,
   RESORT_PHONE,
 } from '../data/resort';
 
 const ContactPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     name: '',
@@ -19,6 +20,24 @@ const ContactPage: React.FC = () => {
     subject: 'Villa enquiry',
     message: '',
   });
+
+  useEffect(() => {
+    const subjectParam = searchParams.get('subject');
+    const propertyName = searchParams.get('property');
+    const propertyId = searchParams.get('id');
+
+    if (subjectParam === 'purchase' || propertyName) {
+      const title = propertyName ?? 'a property';
+      const ref = propertyId ? ` (Ref: ${propertyId})` : '';
+      setForm((prev) => ({
+        ...prev,
+        subject: 'Property purchase enquiry',
+        message:
+          prev.message ||
+          `Hi,\n\nI am interested in purchasing: ${title}${ref}.\n\nPlease share pricing details, site visit availability, and required documents.\n\nThank you.`,
+      }));
+    }
+  }, [searchParams]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +51,8 @@ const ContactPage: React.FC = () => {
           <AnimatedSection>
             <h1 className="font-heading text-4xl md:text-5xl text-gray-900 mb-3">Contact us</h1>
             <p className="text-xl text-gray-600 max-w-2xl">
-              Questions about a specific villa, availability, or directions? Our reservations team manages every property in our collection.
+              Questions about a villa stay, a plot or villa for sale, availability, or directions? Our team
+              manages every property in our collection.
             </p>
           </AnimatedSection>
         </div>
@@ -115,6 +135,7 @@ const ContactPage: React.FC = () => {
                         className="w-full rounded-lg border border-gray-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-airbnb-red/30"
                       >
                         <option>Villa enquiry</option>
+                        <option>Property purchase enquiry</option>
                         <option>Facilities & events</option>
                         <option>Group booking</option>
                         <option>Other</option>
@@ -129,7 +150,7 @@ const ContactPage: React.FC = () => {
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
                       className="w-full rounded-lg border border-gray-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-airbnb-red/30"
-                      placeholder="Tell us your dates, number of guests, or any questions..."
+                      placeholder="Tell us about the property you are interested in, your budget, or any questions..."
                     />
                   </div>
                   <Button type="submit" size="lg" fullWidth className="rounded-full btn-primary-motion">

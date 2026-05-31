@@ -6,6 +6,7 @@ import AnimatedSection from './components/ui/AnimatedSection';
 import PublicLayout from './components/layout/PublicLayout';
 import ScrollToTop from './components/layout/ScrollToTop';
 import { BRAND_TAGLINE, demoRooms } from './data/resort';
+import { formatSalePrice, getCategoryLabel, propertiesForSale } from './data/propertiesForSale';
 import RoomsPage from './pages/RoomsPage';
 import RoomDetailPage from './pages/RoomDetailPage';
 import FacilitiesPage from './pages/FacilitiesPage';
@@ -13,6 +14,9 @@ import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 import UserBookingsPage from './pages/UserBookingsPage';
 import BookingPage from './pages/BookingPage';
+import PropertiesForSalePage from './pages/PropertiesForSalePage';
+import PropertyForSaleDetailPage from './pages/PropertyForSaleDetailPage';
+import HeroExplorer from './components/home/HeroExplorer';
 
 // Demo bookings for admin
 const demoAdminBookings = [
@@ -1461,7 +1465,6 @@ const AdminAnalytics = () => {
 
 // HomePage Component
 const HomePage = () => {
-  const [searchLocation, setSearchLocation] = useState('');
   const navigate = useNavigate();
 
   const handleRoomClick = (roomId: string) => {
@@ -1479,51 +1482,12 @@ const HomePage = () => {
               Escape Into The Hills
             </h1>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto motion-safe:animate-fade-in [animation-delay:150ms] opacity-0 [animation-fill-mode:forwards]">
-              {BRAND_TAGLINE}—browse private villas, each with its own home and hillside setting.
+              Book luxury villa stays or explore plots &amp; villas for sale across Lonavala—each with
+              its own home and hillside setting.
             </p>
           </div>
 
-          {/* Search Bar */}
-          <AnimatedSection variant="scale-in" delay={250} className="max-w-4xl mx-auto w-full">
-            <div className="search-bar-shell bg-white rounded-2xl md:rounded-full shadow-lg border border-gray-200 p-3 md:p-2 motion-safe:animate-float">
-              <div className="flex flex-col md:flex-row md:items-center md:divide-x md:divide-gray-300">
-                <div className="flex-1 min-w-0 px-3 py-2 md:px-4 md:py-3 border-b border-gray-100 md:border-b-0">
-                  <div className="text-sm font-bold text-gray-900 mb-1">Where</div>
-                  <input
-                    type="text"
-                    placeholder="Search destinations"
-                    value={searchLocation}
-                    onChange={(e) => setSearchLocation(e.target.value)}
-                    className="w-full text-base font-medium text-gray-700 bg-transparent border-0 focus:outline-none placeholder:text-gray-500"
-                  />
-                </div>
-                <div className="flex-1 min-w-0 px-3 py-2 md:px-4 md:py-3 border-b border-gray-100 md:border-b-0">
-                  <div className="text-sm font-bold text-gray-900 mb-1">Check in</div>
-                  <div className="text-base font-medium text-gray-600">Add dates</div>
-                </div>
-                <div className="flex-1 min-w-0 px-3 py-2 md:px-4 md:py-3 border-b border-gray-100 md:border-b-0">
-                  <div className="text-sm font-bold text-gray-900 mb-1">Check out</div>
-                  <div className="text-base font-medium text-gray-600">Add dates</div>
-                </div>
-                <div className="flex-1 min-w-0 px-3 py-2 md:px-4 md:py-3 flex items-center justify-between gap-3">
-                  <div>
-                    <div className="text-sm font-bold text-gray-900 mb-1">Who</div>
-                    <div className="text-base font-medium text-gray-600">Add guests</div>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => navigate('/villas')}
-                    className="bg-airbnb-red hover:bg-airbnb-red-dark text-white p-3 rounded-full shrink-0 btn-primary-motion"
-                    aria-label="Search villas"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </AnimatedSection>
+          <HeroExplorer />
         </div>
       </div>
 
@@ -1589,6 +1553,68 @@ const HomePage = () => {
         </AnimatedSection>
       </div>
 
+      {/* Plots & villas for sale */}
+      <div className="bg-white border-t border-gray-200 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatedSection>
+            <h2 className="font-heading text-4xl font-normal tracking-wide text-gray-900 mb-2">
+              Plots &amp; villas for sale
+            </h2>
+            <p className="text-xl text-gray-600 mb-8 max-w-2xl">
+              Looking to own in Lonavala? Explore NA plots and ready villas with full photo galleries—contact
+              us directly to buy.
+            </p>
+          </AnimatedSection>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {propertiesForSale
+              .filter((p) => p.status === 'available')
+              .slice(0, 3)
+              .map((property, index) => (
+                <AnimatedSection key={property.id} delay={index * 120} variant="fade-up">
+                  <div
+                    className="room-card bg-white rounded-xl overflow-hidden shadow-md cursor-pointer border border-gray-100 h-full"
+                    onClick={() => navigate(`/for-sale/${property.id}`)}
+                    onKeyDown={(e) => e.key === 'Enter' && navigate(`/for-sale/${property.id}`)}
+                    role="button"
+                    tabIndex={0}
+                  >
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={property.images[0]}
+                        alt={property.title}
+                        className="room-card-image w-full h-56 object-cover"
+                      />
+                      <span className="villa-card-tag absolute top-3 left-3 rounded-full bg-white/95 px-3 py-1 text-sm font-bold">
+                        {getCategoryLabel(property.category)}
+                      </span>
+                    </div>
+                    <div className="p-5">
+                      <h3 className="font-heading text-lg text-gray-900 leading-snug uppercase tracking-wide mb-2">
+                        {property.title}
+                      </h3>
+                      <p className="text-gray-600 text-base font-medium mb-2">{property.location}</p>
+                      <p className="text-gray-500 text-base mb-3 line-clamp-2">{property.description}</p>
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-lg villa-card-price">{formatSalePrice(property)}</span>
+                        <span className="text-airbnb-red font-bold text-sm">View details →</span>
+                      </div>
+                    </div>
+                  </div>
+                </AnimatedSection>
+              ))}
+          </div>
+          <AnimatedSection delay={200} className="text-center mt-10">
+            <button
+              type="button"
+              onClick={() => navigate('/for-sale')}
+              className="inline-flex items-center rounded-full border-2 border-airbnb-red text-airbnb-red px-6 py-3 font-bold hover:bg-airbnb-red hover:text-white transition-colors btn-primary-motion"
+            >
+              View all properties for sale
+            </button>
+          </AnimatedSection>
+        </div>
+      </div>
+
       {/* Quick Links */}
       <div className="bg-gray-100 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1600,8 +1626,8 @@ const HomePage = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { name: 'All villas', path: '/villas', image: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&h=300&fit=crop' },
+              { name: 'For sale', path: '/for-sale', image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop' },
               { name: 'Facilities', path: '/facilities', image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop' },
-              { name: 'About us', path: '/about', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop' },
               { name: 'Contact', path: '/contact', image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=300&fit=crop' },
             ].map((item, index) => (
               <AnimatedSection key={item.name} delay={index * 100} variant="scale-in">
@@ -1614,8 +1640,8 @@ const HomePage = () => {
                   alt={item.name}
                   className="explore-tile-image w-full h-32 object-cover transition-transform duration-500 ease-out"
                 />
-                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center">
-                  <span className="explore-tile-label text-white font-bold text-lg transition-all duration-300">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/25 group-hover:from-black/90 group-hover:via-black/60 transition-colors duration-300 flex items-center justify-center p-3">
+                  <span className="explore-tile-label text-white font-heading text-base sm:text-lg uppercase tracking-wide text-center drop-shadow-[0_2px_6px_rgba(0,0,0,0.85)]">
                     {item.name}
                   </span>
                 </div>
@@ -1657,6 +1683,8 @@ function App() {
           <Route path="/rooms/:id" element={<LegacyRoomRedirect />} />
           <Route path="/villas" element={<RoomsPage />} />
           <Route path="/villas/:id" element={<RoomDetailPage />} />
+          <Route path="/for-sale" element={<PropertiesForSalePage />} />
+          <Route path="/for-sale/:id" element={<PropertyForSaleDetailPage />} />
           <Route path="/facilities" element={<FacilitiesPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />

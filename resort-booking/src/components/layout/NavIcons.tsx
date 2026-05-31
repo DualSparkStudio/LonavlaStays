@@ -130,6 +130,24 @@ export const NavIconContact: React.FC<NavIconProps> = ({ className }) => (
   </svg>
 );
 
+export const NavIconForSale: React.FC<NavIconProps> = ({ className }) => (
+  <svg
+    viewBox="0 0 32 32"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className ?? iconClass}
+    aria-hidden
+  >
+    <rect x="5" y="14" width="14" height="12" rx="1" fill="#F7F7F7" stroke="#D3D3D3" strokeWidth="0.6" />
+    <path d="M4 14 12 8l8 6" fill="#E8E8E8" stroke="#A8A8A8" strokeWidth="0.7" strokeLinejoin="round" />
+    <rect x="9" y="18" width="3" height="4" rx="0.3" fill="#FF385C" />
+    <rect x="14" y="17" width="2.5" height="2.5" rx="0.3" fill="#A8D4F5" stroke="#8BBDE8" strokeWidth="0.35" />
+    <circle cx="24" cy="11" r="6" fill="#FF385C" />
+    <path d="M21.5 11h5M24 8.5v5" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+    <rect x="20" y="22" width="8" height="2.5" rx="0.5" fill="#C4C4C4" />
+  </svg>
+);
+
 export type NavIconComponent = React.FC<NavIconProps>;
 
 export const mainNavConfig: {
@@ -140,6 +158,7 @@ export const mainNavConfig: {
 }[] = [
   { label: 'Home', href: '/', page: 'home', Icon: NavIconHome },
   { label: 'Villas', href: '/villas', page: 'villas', Icon: NavIconRooms },
+  { label: 'For Sale', href: '/for-sale', page: 'for-sale', Icon: NavIconForSale },
   { label: 'Facilities', href: '/facilities', page: 'facilities', Icon: NavIconFacilities },
   { label: 'About', href: '/about', page: 'about', Icon: NavIconAbout },
   { label: 'Contact', href: '/contact', page: 'contact', Icon: NavIconContact },

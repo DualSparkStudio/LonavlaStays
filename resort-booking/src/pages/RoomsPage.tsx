@@ -1,26 +1,51 @@
-import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import PublicLayout from '../components/layout/PublicLayout';
 import AnimatedSection from '../components/ui/AnimatedSection';
 import { BRAND_TAGLINE, demoRooms, formatPrice } from '../data/resort';
 
 const RoomsPage: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const [typeFilter, setTypeFilter] = useState('all');
+  const [areaFilter, setAreaFilter] = useState('all');
   const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'rating'>('rating');
 
+  useEffect(() => {
+    const area = searchParams.get('area');
+    if (area) setAreaFilter(area);
+  }, [searchParams]);
+
+  const searchHint = useMemo(() => {
+    const parts: string[] = [];
+    const checkIn = searchParams.get('checkIn');
+    const checkOut = searchParams.get('checkOut');
+    const guests = searchParams.get('guests');
+    if (checkIn && checkOut) parts.push(`${checkIn} → ${checkOut}`);
+    if (guests) parts.push(`${guests} guest${guests !== '1' ? 's' : ''}`);
+    return parts.length ? parts.join(' · ') : null;
+  }, [searchParams]);
+
   const roomTypes = ['all', ...Array.from(new Set(demoRooms.map((r) => r.room_type)))];
+  const areas = ['all', ...Array.from(new Set(demoRooms.map((r) => r.location)))];
 
   const rooms = useMemo(() => {
     let list = demoRooms.filter((r) => r.status === 'available');
     if (typeFilter !== 'all') {
       list = list.filter((r) => r.room_type === typeFilter);
     }
+    if (areaFilter !== 'all') {
+      list = list.filter((r) => r.location === areaFilter);
+    }
+    const guestCount = Number(searchParams.get('guests'));
+    if (guestCount > 0) {
+      list = list.filter((r) => r.max_guests >= guestCount);
+    }
     return [...list].sort((a, b) => {
       if (sortBy === 'price-asc') return a.price_per_night - b.price_per_night;
       if (sortBy === 'price-desc') return b.price_per_night - a.price_per_night;
       return b.rating - a.rating;
     });
-  }, [typeFilter, sortBy]);
+  }, [typeFilter, areaFilter, sortBy, searchParams]);
 
   return (
     <PublicLayout currentPage="villas">
@@ -31,6 +56,12 @@ const RoomsPage: React.FC = () => {
             <p className="text-xl text-gray-600 max-w-2xl">
               {BRAND_TAGLINE}. Each listing is a separate private villa—compare locations, capacity, and amenities to find your fit.
             </p>
+            {searchHint && (
+              <p className="mt-3 text-base font-medium text-airbnb-red">
+                Showing stays for: {searchHint}
+                {areaFilter !== 'all' ? ` · ${areaFilter}` : ''}
+              </p>
+            )}
           </AnimatedSection>
         </div>
       </div>
@@ -53,17 +84,38 @@ const RoomsPage: React.FC = () => {
               </button>
             ))}
           </div>
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-            className="rounded-lg border border-gray-200 px-4 py-2 text-base font-medium bg-white focus:outline-none focus:ring-2 focus:ring-airbnb-red/30"
-          >
-            <option value="rating">Top rated</option>
-            <option value="price-asc">Price: low to high</option>
-            <option value="price-desc">Price: high to low</option>
-          </select>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <select
+              value={areaFilter}
+              onChange={(e) => setAreaFilter(e.target.value)}
+              className="rounded-lg border border-gray-200 px-4 py-2 text-base font-medium bg-white focus:outline-none focus:ring-2 focus:ring-airbnb-red/30"
+            >
+              {areas.map((area) => (
+                <option key={area} value={area}>
+                  {area === 'all' ? 'All areas' : area}
+                </option>
+              ))}
+            </select>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+              className="rounded-lg border border-gray-200 px-4 py-2 text-base font-medium bg-white focus:outline-none focus:ring-2 focus:ring-airbnb-red/30"
+            >
+              <option value="rating">Top rated</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+            </select>
+          </div>
         </div>
 
+        {rooms.length === 0 ? (
+          <div className="text-center py-16 text-gray-600">
+            <p className="text-lg font-medium mb-4">No villas match your search.</p>
+            <Link to="/villas" className="text-airbnb-red font-bold hover:underline">
+              View all villas →
+            </Link>
+          </div>
+        ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 sm:gap-8">
           {rooms.map((room, index) => (
             <AnimatedSection key={room.id} delay={index * 100}>
@@ -109,6 +161,7 @@ const RoomsPage: React.FC = () => {
             </AnimatedSection>
           ))}
         </div>
+        )}
       </div>
     </PublicLayout>
   );

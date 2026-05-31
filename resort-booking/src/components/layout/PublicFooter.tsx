@@ -18,6 +18,7 @@ const PublicFooter: React.FC = () => (
           <ul className="space-y-2">
             {[
               { name: 'Villas', path: '/villas' },
+              { name: 'For Sale', path: '/for-sale' },
               { name: 'Facilities', path: '/facilities' },
               { name: 'About', path: '/about' },
               { name: 'Contact', path: '/contact' },

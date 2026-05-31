@@ -6,6 +6,7 @@ import PublicFooter from './PublicFooter';
 function resolveCurrentPage(pathname: string): string {
   if (pathname === '/') return 'home';
   if (pathname.startsWith('/villas')) return 'villas';
+  if (pathname.startsWith('/for-sale')) return 'for-sale';
   if (pathname.startsWith('/facilities')) return 'facilities';
   if (pathname.startsWith('/about')) return 'about';
   if (pathname.startsWith('/contact')) return 'contact';
